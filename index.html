@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Guardião da Floresta Sagrada</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f0f8e2; color: #333; padding: 20px; }
+        h1 { color: #228B22; }
+        .recursos { background: #e8f5e8; padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .decisao { margin: 10px 0; }
+        button { background: #4CAF50; color: white; border: none; padding: 10px; cursor: pointer; margin: 5px; }
+        button:hover { background: #45a049; }
+        .final { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Guardião da Floresta Sagrada</h1>
+    <p>Você é Tupinambá Arapiun, líder da Terra Indígena Arapiuns. Sua comunidade enfrenta biopirataria, crise econômica e impugnação eleitoral. Tome decisões para equilibrar Justiça Social, Sustentabilidade Econômica e Autonomia Cultural. Se uma barra zerar, a aldeia perde sua identidade!</p>
+    
+    <div class="recursos">
+        <h3>Recursos Atuais:</h3>
+        <p>Sabedoria Ancestral: <span id="sabedoria">5</span></p>
+        <p>Apoio Popular: <span id="apoio">5</span></p>
+        <p>Recursos Financeiros: <span id="financeiro">5</span></p>
+        <p>Credibilidade Jurídica: <span id="juridica">5</span></p>
+        <p>Equilíbrio: Justiça Social: <span id="justica">5</span> | Sustentabilidade: <span id="sustentabilidade">5</span> | Autonomia: <span id="autonomia">5</span></p>
+    </div>
+    
+    <div id="historia">
+        <p><strong>Introdução:</strong> A BioVerde S.A. patenteou o composto medicinal da sua aldeia. Sua cooperativa está falindo, e sua candidatura à prefeitura foi impugnada. Você deve investigar, salvar a cooperativa e convencer o tribunal.</p>
+        <p>Escolha sua primeira missão:</p>
+        <button onclick="missao1()">Defender o Saber Ancestral (Biopirataria)</button>
+        <button onclick="missao2()">Salvar a Cooperativa</button>
+        <button onclick="missao3()">Candidatura à Prefeitura</button>
+    </div>
+    
+    <script>
+        let sabedoria = 5, apoio = 5, financeiro = 5, juridica = 5, justica = 5, sustentabilidade = 5, autonomia = 5;
+        let missaoAtual = 0;
+        
+        function atualizarRecursos() {
+            document.getElementById('sabedoria').textContent = sabedoria;
+            document.getElementById('apoio').textContent = apoio;
+            document.getElementById('financeiro').textContent = financeiro;
+            document.getElementById('juridica').textContent = juridica;
+            document.getElementById('justica').textContent = justica;
+            document.getElementById('sustentabilidade').textContent = sustentabilidade;
+            document.getElementById('autonomia').textContent = autonomia;
+            if (justica <= 0 || sustentabilidade <= 0 || autonomia <= 0) {
+                document.getElementById('historia').innerHTML = '<p class="final">Derrota! Você focou demais em lucro ou poder, e a aldeia perdeu sua identidade cultural. Reinicie o jogo para tentar novamente.</p><button onclick="reiniciar()">Reiniciar</button>';
+            }
+        }
+        
+        function missao1() {
+            missaoAtual = 1;
+            document.getElementById('historia').innerHTML = `
+                <p><strong>Missão 1: Defenda o Saber Ancestral</strong> (Baseado na Lei nº 13.123/2015 e Convenção 169 OIT)</p>
+                <p>Você investiga a BioVerde. Encontra provas de biopirataria. Desafio Jurídico: Qual norma protege o conhecimento tradicional? (Responda: Art. 231 CF)</p>
+                <input id="resposta" placeholder="Sua resposta"><button onclick="verificarResposta('Art. 231 CF')">Verificar</button>
+            `;
+        }
+        
+        function verificarResposta(correta) {
+            const resp = document.getElementById('resposta').value;
+            if (resp.toLowerCase().includes('231')) {
+                juridica += 2; autonomia += 1;
+                document.getElementById('historia').innerHTML += '<p>Correto! Você ganha credibilidade jurídica.</p>';
+            } else {
+                juridica -= 1;
+                document.getElementById('historia').innerHTML += '<p>Errado. Perde credibilidade.</p>';
+            }
+            atualizarRecursos();
+            document.getElementById('historia').innerHTML += `
+                <p>Agora, decida: Negociar com BioVerde (ganha financeiro, perde autonomia) ou Processar (ganha justiça, perde financeiro)?</p>
+                <button onclick="decisao1('negociar')">Negociar</button>
+                <button onclick="decisao1('processar')">Processar</button>
+            `;
+        }
+        
+        function decisao1(escolha) {
+            if (escolha === 'negociar') {
+                financeiro += 2; autonomia -= 1;
+            } else {
+                justica += 2; financeiro -= 1;
+            }
+            atualizarRecursos();
+            document.getElementById('historia').innerHTML += '<p>Missão 1 completa! Vá para a próxima.</p><button onclick="missao2()">Próxima Missão</button>';
+        }
+        
+        function missao2() {
+            missaoAtual = 2;
+            document.getElementById('historia').innerHTML = `
+                <p><strong>Missão 2: Salve a Cooperativa</strong> (Baseado na Lei nº 11.101/2005 e art. 170 CF)</p>
+                <p>Busque recuperação judicial. Desafio: Manter cooperativista (ganha autonomia) ou adaptar para empresa social (ganha sustentabilidade)?</p>
+                <button onclick="decisao2('cooperativa')">Manter Cooperativa</button>
+                <button onclick="decisao2('empresa')">Adaptar para Empresa Social</button>
+            `;
+        }
+        
+        function decisao2(escolha) {
+            if (escolha === 'cooperativa') {
+                autonomia += 2; sustentabilidade -= 1;
+            } else {
+                sustentabilidade += 2; autonomia -= 1;
+            }
+            atualizarRecursos();
+            document.getElementById('historia').innerHTML += '<p>Missão 2 completa! Vá para a última.</p><button onclick="missao3()">Próxima Missão</button>';
+        }
+        
+        function missao3() {
+            missaoAtual = 3;
+            document.getElementById('historia').innerHTML = `
+                <p><strong>Missão 3: Candidatura à Prefeitura</strong> (Baseado no art. 14 CF e Convenção 169 OIT)</p>
+                <p>Enfrente a impugnação. Debate: Use pluralismo jurídico para convencer o tribunal.</p>
+                <p>Decida: Focar em direitos indígenas (ganha justiça) ou alianças políticas (ganha apoio, perde autonomia)?</p>
+                <button onclick="decisao3('direitos')">Direitos Indígenas</button>
+                <button onclick="decisao3('aliancas')">Alianças Políticas</button>
+            `;
+        }
+        
+        function decisao3(escolha) {
+            if (escolha === 'direitos') {
+                justica += 2; apoio += 1;
+            } else {
+                apoio += 2; autonomia -= 1;
+            }
+            atualizarRecursos();
+            if (justica > 0 && sustentabilidade > 0 && autonomia > 0) {
+                document.getElementById('historia').innerHTML += '<p class="final">Vitória! Você anulou a patente, reestruturou a cooperativa e ganhou a eleição, mantendo o equilíbrio cultural. Parabéns!</p><button onclick="reiniciar()">Jogar Novamente</button>';
+            }
+        }
+        
+        function reiniciar() {
+            sabedoria = 5; apoio = 5; financeiro = 5; juridica = 5; justica = 5; sustentabilidade = 5; autonomia = 5;
+            atualizarRecursos();
+            document.getElementById('historia').innerHTML = `
+                <p><strong>Introdução:</strong> A BioVerde S.A. patenteou o composto medicinal da sua aldeia. Sua cooperativa está falindo, e sua candidatura à prefeitura foi impugnada. Você deve investigar, salvar a cooperativa e convencer o tribunal.</p>
+                <p>Escolha sua primeira missão:</p>
+                <button onclick="missao1()">Defender o Saber Ancestral (Biopirataria)</button>
+                <button onclick="missao2()">Salvar a Cooperativa</button>
+                <button onclick="missao3()">Candidatura à Prefeitura</button>
+            `;
+        }
+    </script>
+</body>
+</html>
